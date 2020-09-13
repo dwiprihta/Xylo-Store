@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Store - Your Best Marketplace</title>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <link href="style/main.css" rel="stylesheet" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light navbar-store fixed-top navbar-fixed-top" data-aos="fade-down">
+    <div class="container">
+      <a href="/index.html" class="navbar-brand">
+        <img src="/images/logo.svg" alt="Logo" />
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/categories.html">Categories</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reward.html">Reward</a>
+          </li>
+        </ul>
+        <!-- Menu for desktop -->
+        <ul class="navbar-nav d-none d-lg-flex">
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+              <img src="images/icon-user.png" alt="Gambar Profile User" class="rounded-circle mr-2 profile-picture" />
+              Hi, Angga
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/dhasboard.html">Dhasboard</a>
+              <a class="dropdown-item" href="/dhasboard-account.html">Setting</a>
+              <div class="dropdown-divider"></div>
+              <a class="btn btn-md btn-primary dropdown-item" href="/logout.html">Logout</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="/cart.html" class="nav-link mt-2 d-inline-block">
+              <img src="/images/icon-cart-empty.svg" alt="" />
+            </a>
+          </li>
+        </ul>
+        <!-- Menu for desktop -->
+
+        <!-- Menu for Mobile -->
+        <ul class="navbar-nav d-block d-lg-none">
+          <li class="nav-item dropdown">
+            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+              Hi, Angga
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/dhasboard.html">Dhasboard</a>
+              <a class="dropdown-item" href="/dhasboard-account.html">Setting</a>
+              <div class="dropdown-divider"></div>
+              <a class="btn btn-md btn-primary dropdown-item" href="/logout.html">Logout</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="/cart.html" class="nav-link mt-2 d-inline-block">
+              Cart
+            </a>
+          </li>
+        </ul>
+        <!-- Menu for Mobile -->
+      </div>
+    </div>
+  </nav>
+  <!-- Navbar -->
+
+  <!-- Page Content -->
+  <div class="page-content page-details">
+    <section class="store-breadcrumbs">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <nav">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Library
+                </li>
+              </ol>
+              </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="store-gallery" id="gallery">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8" data-aos="zoom-in">
+            <transition name="slide-fade" mode="out-in">
+              <img :key="photos[activePhoto].id" :src="photos[activePhoto].url" class="w-100 main-image" alt="" />
+            </transition>
+          </div>
+          <div class="col-lg-2">
+            <div class="row mt-2">
+              <div class="col-3 col-lg-12 mt-lg-8" v-for="(photo,index) in photos" :key="photo.id" data-aos="zoom-in"
+                data-aos-delay="100">
+                <a href="#" @click="changeActive(index)">
+                  <img :src="photo.url" class="w-100 thumbnail-image" :class="{active:index==activePhoto}" alt="">
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="store-details-container" data-aos="fade-up">
+      <section class="store-heading">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8">
+              <h1>Sofa Alexca</h1>
+              <div class="owner">Dwi Prihta </div>
+              <div class="price">$340</div>
+            </div>
+            <div class="col-lg-2">
+              <a href="/cart.html" class="btn btn-success px-4 text-white btn-block mb-3">Add to cart</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="store-description">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-lg-8">
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio accusantium, veritatis laborum sed non
+                  perferendis error provident, accusamus reprehenderit ab excepturi sapiente iusto tenetur quia
+                  perspiciatis vitae harum cupiditate ipsa similique pariatur? Dolores provident dolorem ullam
+                  cupiditate temporibus tempore nihil eaque architecto voluptatum? Illum aspernatur error qui quia
+                  ducimus ad?
+                </p>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio accusantium, veritatis laborum sed non
+                  perferendis error provident, accusamus reprehenderit ab excepturi sapiente iusto tenetur quia
+                  perspiciatis vitae harum cupiditate ipsa similique pariatur? Dolores provident dolorem ullam
+                  cupiditate temporibus tempore nihil eaque architecto voluptatum? Illum aspernatur error qui quia
+                  ducimus ad?
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="store-review">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 mt-5 mb-5">
+              <h5> Cutomer Review (3)</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-9 col-md-12 col-sm-12">
+              <div class="media">
+                <img src="images/icon-testimonial-1.png" class="mr-3" alt="Profil Tstimonial">
+                <div class="media-body">
+                  <h5 class="mt-0">Media heading</h5>
+                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus
+                  odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
+                  fringilla. Donec lacinia congue felis in faucibus.
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-9 col-md-12 col-sm-12">
+              <div class="media">
+                <img src="images/icon-testimonial-2.png" class="mr-3" alt="Profil Tstimonial">
+                <div class="media-body">
+                  <h5 class="mt-0">Media heading</h5>
+                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus
+                  odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
+                  fringilla. Donec lacinia congue felis in faucibus.
+                </div>
+              </div>git init
+            </div>
+            <div class="col-lg-9 col-md-12 col-sm-12">
+              <div class="media">
+                <img src="images/icon-testimonial-3.png" class="mr-3" alt="Profil Tstimonial">
+                <div class="media-body">
+                  <h5 class="mt-0">Media heading</h5>
+                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus
+                  odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate
+                  fringilla. Donec lacinia congue felis in faucibus.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+
+
+
+  </div>
+  <!-- Page Content -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <p class="pt-4 pb-2">2020 Copyright Dwi Prihtapambudi</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Footer -->
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="/vendor/jquery/jquery.slim.min.js"></script>
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="/vendor/vue/vue.js"></script>
+  <script>
+    var gallery = new Vue({
+      el: "#gallery",
+      mounted() {
+        AOS.init();
+      },
+      data: {
+        activePhoto: 1,
+        photos: [{
+            id: 1,
+            url: "/images/product-details-1.jpg"
+          },
+          {
+            id: 2,
+            url: "/images/product-details-2.jpg"
+          },
+          {
+            id: 3,
+            url: "/images/product-details-3.jpg"
+          },
+          {
+            id: 4,
+            url: "/images/product-details-4.jpg"
+          },
+        ],
+      },
+      methods: {
+        changeActive(id) {
+          this.activePhoto = id
+        }
+      }
+    })
+  </script>
+
+  <script src="/script/navbar-scroll.js"></script>
+</body>
+
+</html>

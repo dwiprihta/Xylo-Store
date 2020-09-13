@@ -1,0 +1,7 @@
+.btn-remove {
+  @include button-variant(#fc5e84, transparent);
+}
+
+.btn-default {
+  @include button-variant(#f3f3f3, transparent);
+}

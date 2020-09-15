@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.success')
+@section('title')
+    Transaction Success
+@endsection
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-  <title>Store - Your Best Marketplace</title>
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <link href="style/main.css" rel="stylesheet" />
-</head>
-
-<body>
+@section('content')
     <div class="page-content page-success">
         <div class="section-success" data-aos="zoom-in">
             <div class="container">
@@ -36,17 +28,4 @@
             </div>
         </div>
     </div>
-</body>
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="/vendor/jquery/jquery.slim.min.js"></script>
-  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script src="/vendor/vue/vue.js"></script>
-  <script>
-    AOS.init();
-  </script>
-  <script src="/script/navbar-scroll.js"></script>
-</body>
-
-</html>
+@endsection

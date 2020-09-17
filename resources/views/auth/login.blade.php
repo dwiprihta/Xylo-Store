@@ -1,7 +1,42 @@
-@extends('layouts.app')
+@extends('layouts.auth')
+
+@section('title')
+  Login  
+@endsection
 
 @section('content')
-<div class="container">
+<div class="page-content page-auth">
+      <section class="store-auth" data-aos="fade-up">
+        <div class="container">
+            <div class="row row-login align-items-center row-align">
+                <div class="col-lg-6 text-center">
+                    <img src="/images/login-placeholder.png" alt="image-login-placeholder" class="w-50 mb-4 mb-lg-none">
+                </div>
+                <div class="col-lg-5">
+                    <h2>Belanja furniture menjadi lebih mudah</h2>
+                    <form action="" class="mt-3 w-75">
+                        <div class="form-group">
+                            <label for="userName">Username</label>
+                            <input type="text" class="form-control" name="userName" id="userName">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Username</label>
+                            <input type="text" class="form-control" name="password" id="password">
+                        </div>
+                           <button type="submit" name="sumbit" id="btn-add" class="btn btn-success btn-block mt-4">
+                            Sign to My Account
+                           </button>
+                           <a href="/register.html" class="btn btn-default btn-block">
+                            Sign Up
+                           </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+      </section>
+</div>
+
+{{-- <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -69,5 +104,5 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection

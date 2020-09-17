@@ -3,7 +3,7 @@
       data-aos="fade-down"
     >
       <div class="container">
-        <a href="/index.html" class="navbar-brand">
+        <a href="{{url('/')}}" class="navbar-brand">
           <img src="/images/logo.svg" alt="Logo" />
         </a>
         <button

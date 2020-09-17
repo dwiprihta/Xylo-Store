@@ -192,7 +192,7 @@
               data-aos="fade-up"
               data-aos-delay="100"
             >
-              <a href="/details.html" class="component-products d-block">
+              <a href="{{url('details/1')}}" class="component-products d-block">
                 <div class="products-thumbnail">
                   <div
                     class="products-image"

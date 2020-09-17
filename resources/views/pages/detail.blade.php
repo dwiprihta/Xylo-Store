@@ -54,7 +54,7 @@
               <div class="price">$340</div>
             </div>
             <div class="col-lg-2">
-              <a href="/cart.html" class="btn btn-success px-4 text-white btn-block mb-3">Add to cart</a>
+              <a href="{{url('carts')}}" class="btn btn-success px-4 text-white btn-block mb-3">Add to cart</a>
             </div>
           </div>
         </div>

@@ -35,7 +35,7 @@
             <li class="nav-item">
               <a
                 class="nav-link"
-                href="/register.html"
+                href="{{url('register')}}"
                 tabindex="-1"
                 aria-disabled="true"
                 >Sign Up</a
@@ -43,7 +43,7 @@
             </li>
             <li class="nav-item">
               <a
-                href="/login.html"
+                href="{{url('login')}}"
                 class="btn btn-success nav-link text-white px-4"
                 >Sign In</a
               >

@@ -19,6 +19,11 @@ Route::get('/details/{id}', 'DetailController@index')->name('details');
 Route::get('/carts', 'cartController@index')->name('carts');
 Route::get('/success', 'cartController@success')->name('success');
 Route::get('/register/success', 'Auth\RegisterController@success')->name('register-success');
+Route::get('/dashboards', 'DashboardController@index')->name('dashboard');
+Route::get('/dashboards/products', 'DashboardController@product')->name('product');
+Route::get('/dashboards/products/create', 'DashboardController@create')->name('product-create');
+Route::get('/dashboards/products/{id}', 'DashboardController@detail')->name('product-detail');
+
 
 
 

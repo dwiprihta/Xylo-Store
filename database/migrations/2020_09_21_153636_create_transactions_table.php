@@ -20,7 +20,6 @@ class CreateTransactionsTable extends Migration
             $table->integer('shipping_price');
             $table->integer('total_price');
             $table->string('transaction_status');
-            $table->string('resi');
             $table->softDeletes();
             $table->timestamps();
         });

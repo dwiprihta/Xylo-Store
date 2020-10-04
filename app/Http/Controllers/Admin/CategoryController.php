@@ -30,7 +30,7 @@ class CategoryController extends Controller
                         Aksi
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" data-toggle="modal" data-target="#modalUpdate" href="'.route('category.edit',$item->id).'">Ubah</a>
+                        <a class="dropdown-item" href="'.route('category.edit',$item->id).'">Ubah</a>
                         <form action="'.route('category.destroy',$item->id).'" method="POST">
                         '.method_field('delete').csrf_field().'
                         <button type="submit" class="dropdown-item text-danger">Hapus</button>
@@ -92,7 +92,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $item = Category::findOrFail($id);
-        return view('pages.admin.category.index',['item'=>$item]);
+        return view('pages.admin.category.edit',['item'=>$item]);
     }
 
     /**
@@ -107,7 +107,7 @@ class CategoryController extends Controller
         $data=$request->all();
         $data['slug']=Str::slug($request->name);
         $data['photo']=$request->file('photo')->store('category','public');
-        $item=Category::findprFail($id);
+        $item=Category::findorFail($id);
         $item->update($data);
         return redirect()->route('category.index');  
     }

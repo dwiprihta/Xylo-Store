@@ -43,7 +43,7 @@
 </div>
 @endsection
 
-<!-- Modal Add -->
+<!-- Modal Add & Update-->
 <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -65,32 +65,7 @@
     </div>
   </div>
 </div>
-<!-- Modal Add -->
-
-<!-- Modal Update -->
-<div class="modal fade" id="modalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="exampleModalLabel">Update Category</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="{{route('category.update',$item->id)}}" method="POST" enctype="multipart/form-data">
-          @method('PATCH')
-            @csrf
-            @include('pages.admin.category.form')
-      </div>
-            <div class="modal-footer">
-                 <button type="submit" class="btn btn-success">Save </button>
-            </div>
-        </form>
-    </div>
-  </div>
-</div>
-<!-- Modal Update -->
+<!-- Modal Add & Update -->
 
 @push('addon-script')
 <script>

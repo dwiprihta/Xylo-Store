@@ -22,7 +22,7 @@
                     <div class="card-body">
                         <a class="btn btn-sm btn-success text-white" data-target="#modalAdd" data-toggle="modal">+ Add Category</a>
                             <div class="table-responsive mt-5">
-                            <table class="table table-borderless table-hover scroll-horizontal-vertical" id="crudTable">
+                            <table class="table table-borderless table-hover scroll-horizontal-vertical" id="appTable">
                                 <thead>
                                     <tr class="">
                                     <th scope="col">id</th>
@@ -44,11 +44,11 @@
 @endsection
 
 <!-- Modal Add & Update-->
-<div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalCategory" id="modalAction" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+        <h5 class="modal-title" id="modalTittle"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -69,7 +69,7 @@
 
 @push('addon-script')
 <script>
-    var datatable = $('#crudTable').DataTable({
+    var datatable = $('#appTable').DataTable({
         processing:true,
         serverSide:true,
         ordering:true,

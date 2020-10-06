@@ -22,7 +22,7 @@
                     <div class="card-body">
                         <form action="{{route('category.update',$item->id)}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PATCH')
+                            @method('PUT')
                             @include('pages.admin.category.form')
                              <button type="submit" class="btn btn-success">Save </button>
                         </form>

@@ -30,7 +30,7 @@ class CategoryController extends Controller
                         Aksi
                     </button>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="'.route('category.edit',$item->id).'">Ubah</a>
+                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$item->id.'" class="dropdown-item change-category">Ubah</a>
                         <form action="'.route('category.destroy',$item->id).'" method="POST">
                         '.method_field('delete').csrf_field().'
                         <button type="submit" class="dropdown-item text-danger">Hapus</button>
@@ -38,9 +38,8 @@ class CategoryController extends Controller
                 </div>';
             })
             ->editColumn('photo', function ($item){
-                return $item->photo ? '<img src="' . Storage::url($item->photo).'" style="max-height:50px;"/>' : '';
+                return $item->photo ? '<img src="'.Storage::url("category/$item->photo").'" style="max-height:50px;"/>' : '';
             })
-
             ->rawColumns(['action','photo'])
             ->make();
     }
@@ -65,11 +64,28 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        $data=$request->all();
-        $data['slug']=Str::slug($request->name);
-        $data['photo']=$request->file('photo')->store('category','public');
-        Category::create($data);
-        return redirect()->route('category.index');  
+        $request=request();
+        $data=$request->All();
+        if ($request->hasFile('photo')){
+            $slug=Str::slug($request['name']);
+            $extFile=$request->photo->getClientOriginalExtension();
+            $namaFile=$slug.'-'.time().".".$extFile;
+            $request->photo->storeAs('public/category',$namaFile);
+        }else{
+             $namaFile='defaultPhoto.jpg';
+        }
+         $data=Category::create([
+            'name'=>$request['name'],
+            'photo'=>$namaFile,
+            'slug'=>Str::slug($request->name),
+        ]);
+
+
+        // $data=$request->All();
+        // $data['slug']=Str::slug($request->name);
+        // $data['photo']=$request->file('photo')->store('assets/category', 'public');
+        // Category::create($data);
+        return response()->json($data); 
     }
 
     /**
@@ -91,8 +107,10 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $item = Category::findOrFail($id);
-        return view('pages.admin.category.edit',['item'=>$item]);
+        $where = array('id' => $id);
+        $post  = Category::where($where)->first();
+     
+        return response()->json($post);
     }
 
     /**

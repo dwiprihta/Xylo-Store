@@ -31,9 +31,7 @@ class CategoryController extends Controller
                     </button>
                     <div class="dropdown-menu">
                         <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$item->id.'" class="dropdown-item change-category">Ubah</a>
-                        <form action="'.route('category.destroy',$item->id).'" method="POST">
-                        '.method_field('delete').csrf_field().'
-                        <button type="submit" class="dropdown-item text-danger">Hapus</button>
+                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$item->id.'" class="dropdown-item delete text-danger">Hapus</a>
                     </div>
                 </div>';
             })
@@ -62,9 +60,17 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
-        $request=request();
+
+        //validasi data user ke database
+        if ($request->ajax()) {
+            $request->validate([
+                'name'=>'required|string|min:5|max:60:',
+                'photo'=>'required|image|mimes:jpg,jpeg,png,gif,tif,svg|max:10000',
+            ]);
+        }
+
         $data=$request->All();
         if ($request->hasFile('photo')){
             $slug=Str::slug($request['name']);
@@ -74,17 +80,10 @@ class CategoryController extends Controller
         }else{
              $namaFile='defaultPhoto.jpg';
         }
-         $data=Category::create([
-            'name'=>$request['name'],
-            'photo'=>$namaFile,
-            'slug'=>Str::slug($request->name),
-        ]);
-
-
-        // $data=$request->All();
-        // $data['slug']=Str::slug($request->name);
-        // $data['photo']=$request->file('photo')->store('assets/category', 'public');
-        // Category::create($data);
+        $id = $request->id;
+        $data['slug']=Str::slug($request->name);
+        $data['photo']=$namaFile;
+        Category::updateOrCreate($data,['id'=>$id]);
         return response()->json($data); 
     }
 
@@ -109,7 +108,6 @@ class CategoryController extends Controller
     {
         $where = array('id' => $id);
         $post  = Category::where($where)->first();
-     
         return response()->json($post);
     }
 
@@ -138,9 +136,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $item = Category::findOrFail($id);
-        $item->delete();
-        return redirect()->route('category.index');
-        
+        $data = Category::findOrFail($id)->delete();
+        return response()->json($data);
     }
 }

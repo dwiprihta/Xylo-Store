@@ -60,19 +60,25 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
 
         //validasi data user ke database
-        if ($request->ajax()) {
-            $request->validate([
-                'name'=>'required|string|min:5|max:60:',
-                'photo'=>'required|image|mimes:jpg,jpeg,png,gif,tif,svg|max:10000',
-            ]);
-        }
+        // if ($request->ajax()) {
+        //     $request->validate([
+        //         'name'=>'required|string|min:5|max:60:',
+        //         'photo'=>'required|image|mimes:jpg,jpeg,png,gif,tif,svg|max:10000',
+        //     ]);
+        // }
 
         $data=$request->All();
         if ($request->hasFile('photo')){
+
+        //code for remove old file
+         if($request->photo && file_exists(storage_path('public/category/' . $request->photo))){
+            Storage::delete('public/category/'.$request->photo);
+         }
+
             $slug=Str::slug($request['name']);
             $extFile=$request->photo->getClientOriginalExtension();
             $namaFile=$slug.'-'.time().".".$extFile;
@@ -83,11 +89,11 @@ class CategoryController extends Controller
         $id = $request->id;
         $data['slug']=Str::slug($request->name);
         $data['photo']=$namaFile;
-        Category::updateOrCreate($data,['id'=>$id]);
+        Category::updateOrCreate(['id'=>$id],$data);
         return response()->json($data); 
     }
 
-    /**
+    /**a
      * Display the specified resource.
      *
      * @param  int  $id
@@ -120,12 +126,12 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $data=$request->all();
-        $data['slug']=Str::slug($request->name);
-        $data['photo']=$request->file('photo')->store('category','public');
-        $item=Category::findorFail($id);
-        $item->update($data);
-        return redirect()->route('category.index');  
+        // $data=$request->all();
+        // $data['slug']=Str::slug($request->name);
+        // $data['photo']=$request->file('photo')->store('category','public');
+        // $item=Category::findorFail($id);
+        // $item->update($data);
+        // return redirect()->route('category.index');  
     }
 
     /**

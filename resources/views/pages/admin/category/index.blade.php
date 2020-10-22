@@ -54,33 +54,37 @@
       </div>
       <div class="modal-body">
         <form id="appForm">
-            <div class="form-group">
+            <input type="hidden" name="id" id="id">
+
+            <div class="form-group" id="form-group-name">
                 <label for="name">Nama Category</label>
                 <input
                     type="text"
-                    class="form-control {!! $errors->has('name') ? 'is-invalid' : 'is-valid' !!}"
+                    class="form-control"
                     id="name"
                     aria-describedby="name"
                     name="name"
                     value=""
-                    required
                 />
+                <div id="error-name"></div>
+                 {{-- <span class="help-block"></span> --}}
                 @error('name')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="form-group-photo">
                 <label for="photo">Icon Category</label>
                 <input
                     type="file"
-                    class="form-control @error('photo') is-invalid @enderror"
+                    class="form-control"
                     id="photo"
                     aria-describedby="photo"
                     name="photo"
                     value=""
-                    required
                 />
+                <div id="error-photo"></div>
+                {{-- <span class="help-block"></span> --}}
                 @error('photo')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
@@ -99,62 +103,98 @@
 <script>
 //Set CSRF Token pada header App
    $(document).ready(function () {
-       //stop loader
-       $(".preloader").fadeOut();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+
+        //stop loader
+        $(".preloader").fadeOut();
+           
+         //start show data with yajra
+        var datatable = $('#appTable').DataTable({
+            processing:true,
+            serverSide:true,
+            ordering:true,
+            ajax:{
+                url:'{!! url()->current() !!}',
+            },
+            columns:[
+                {data:'id', name:'id'},
+                {data:'name', name:'name'},
+                {data:'photo', name:'photo'},
+                {data:'slug', name: 'slug'},
+                {
+                    data:'action',
+                    name:'action',
+                    orderable:false,
+                    searcable:false,
+                    width:'15%'
+                },
+            ],
+            order:[
+                [0,'asc']
+            ]
+        });
+
+        //setup ajax crsf token
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
             });
         });
 
-    //If add button clicked
-    $('#addButton').click(function(){
-        $('#saveButton').val("create-post");//set value to create post
-        $('#id').val('');//set value to Null
-        $('#appForm').trigger("reset");//Reset Form
-        $('#modalTittle').html("ADD Category");//set Modal Tittle
-        $('#appModal').modal('show');//Show Modal
-    });
+        //If add button clicked
+        $('#addButton').click(function(){
+            $('#saveButton').val("create-post");//set value to create post
+            $('#id').val('');//set value to Null
+            $('#appForm').trigger("reset");//Reset Form
+            $('#modalTittle').html("ADD Category");//set Modal Tittle
+            $('#appModal').modal('show');//Show Modal
+        });
 
-    //start show data with yajra
-    var datatable = $('#appTable').DataTable({
-        processing:true,
-        serverSide:true,
-        ordering:true,
-        ajax:{
-            url:'{!! url()->current() !!}',
-        },
-        columns:[
-            {data:'id', name:'id'},
-            {data:'name', name:'name'},
-            {data:'photo', name:'photo'},
-            {data:'slug', name: 'slug'},
-            {
-                data:'action',
-                name:'action',
-                orderable:false,
-                searcable:false,
-                width:'15%'
-            },
-        ],
-        order:[
-            [0,'asc']
-        ]
-    });
-
+        //When update button clicked, show detail data table on modal
+        $('body').on('click', '.change-category', function(){
+            var data_id=$(this).data('id');
+            $.get('category/'+data_id+'/edit',function(data){
+                $('#modalTittle').html("Change Category");
+                $('#saveButton').val("change-category");
+                $('#appModal').modal('show');
+                $('#id').val(data.id);
+                $('#name').val(data.name);
+                $('#photo').val(data.photo);
+            });
+        });
 
     // //Save, update & 
-     if ($("#appForm").length > 0) {
-        $("#appForm").validate({
-        submitHandler: function (form) {
-        var actionType = $('#saveButton').val();
-        $('#saveButton').html('Mengirim...');
+    //  if ($("#appForm").length > 0) {
+    //     $("#appForm").validate({
+    //     submitHandler: function (form) {
+    //     var actionType = $('#saveButton').val();
+    //     $('#saveButton').html('Mengirim...');
+
+        // function showValidationErrors(name, error) {
+        //     var group = $("#form-group-" + name);
+        //     group.addClass('has-error');
+        //     group.find('.help-block').text(error);
+        // }
+
+        // function clearValidationError(name) {
+        //     var group = $("#form-group-" + name);
+        //     group.removeClass('has-error');
+        //     group.find('.help-block').text('');
+        // }
+
+        // $("#name, #photo").on('keyup', function () {
+        //     clearValidationError($(this).attr('id').replace('#', ''))
+        // });
+        // $("#store_id").on('change', function () {
+        //     clearValidationError($(this).attr('id').replace('#', ''))
+        // });
 
         $("#saveButton").click(function (event) {
         event.preventDefault();
             var form = $('#appForm')[0];
             var data = new FormData(form);
+            $('#saveButton').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Mengirim`);
                 $.ajax({
                     type: "POST", //karena simpan kita pakai method POST
                     enctype:'multipart/form-data',
@@ -179,63 +219,55 @@
                             timer: 1500
                         });
                     },
-                    error: function (data) { //jika error tampilkan error pada console
-                        console.log('Error:', data);
+                    error: function (data) { //jika error tampilkan error pada conso
                         $('#saveButton').html('Save');
+                        console.log((data.responseJSON.errors));
+                        $('#error-name').append('<div class="text-danger">'+data.responseJSON.errors.name[0]+'</div>');
+                        $('#error-photo').append('<div class="text-danger">'+data.responseJSON.errors.photo[0]+'</div>');
+                        // if (res.status == 422) {
+                        //     var data = res.responseJSON;
+                        //     for (let i in data) {
+                        //         console.log(i, data[i][0])
+                        //     }
+                        // }
                     }
                 });
             });
-            }  
-        });
-    }
+  
 
-    //when update button clicked, show detail data table on modal
-    $('body').on('click', '.change-category', function(){
-        var data_id=$(this).data('id');
-        $.get('category/'+data_id+'/edit',function(data){
-            $('#modalTittle').html("Change Category");
-            $('#saveButton').val("change-category");
-            $('#appModal').modal('show');
-
-            $('#id').val(data.id)
-            $('#name').val(data.name);
-            $('#photo').val(data.photo);
-        })
-    });
-
-    //jika tombol hapus di klik maka
-     $(document).on('click', '.delete', function (event) {
-            event.preventDefault();
-            dataId = $(this).attr('data-id');
-             Swal.fire({
-                title: "Yakin akan menghapus?",
-                text: "Data yang dihapus tidak dapat diembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3F8838',
-                cancelButtonColor: '#fc5e84',
-                confirmButtonText: 'Hapus',
-                cancelButtonText: 'Batal'
-                }).then((result) => {
-                if (result.isConfirmed) {
-                        $.ajax({
-                            url: "category/" + dataId, //eksekusi ajax ke url ini
-                            type: 'DELETE',
-                            success: function (data) { //jika sukses
-                                var oTable = $('#appTable').dataTable();
-                                oTable.fnDraw(false); //reset datatable
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Terhapus',
-                                    text: 'Data Berhasil dihapus!',
-                                    showConfirmButton:false,
-                                    timer: 1500
-                                });
-                            }
-                        })
-                    }
+        //jika tombol hapus di klik maka
+        $(document).on('click', '.delete', function (event) {
+                event.preventDefault();
+                dataId = $(this).attr('data-id');
+                Swal.fire({
+                    title: "Yakin akan menghapus?",
+                    text: "Data yang dihapus tidak dapat diembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3F8838',
+                    cancelButtonColor: '#fc5e84',
+                    confirmButtonText: 'Hapus',
+                    cancelButtonText: 'Batal'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                            $.ajax({
+                                url: "category/" + dataId, //eksekusi ajax ke url ini
+                                type: 'DELETE',
+                                success: function (data) { //jika sukses
+                                    var oTable = $('#appTable').dataTable();
+                                    oTable.fnDraw(false); //reset datatable
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Terhapus',
+                                        text: 'Data Berhasil dihapus!',
+                                        showConfirmButton:false,
+                                        timer: 1500
+                                    });
+                                }
+                            })
+                        }
+                    });
                 });
-             });
 
 </script>
 @endpush

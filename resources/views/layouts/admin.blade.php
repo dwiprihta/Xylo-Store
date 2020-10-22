@@ -34,7 +34,7 @@
         <!-- Sidebar -->
         <div class="border-right" id="sidebar-wrapper">
           <div class="sidebar-heading text-center">
-            <img src="/images/environment.svg" alt="" class="my-4" style="max-width: 80px;" />
+            <img src="/images/zakra.png" alt="" class="my-4" style="max-width: 300px;" />
           </div>
           <div class="list-group list-group-flush">
             <a

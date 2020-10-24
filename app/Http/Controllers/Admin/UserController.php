@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Category;
+use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Requests\Admin\CategoryRequest;
+use App\Http\Requests\Admin\UserRequest;
 use Illuminate\Support\Str;
 
 
-class CategoryController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +22,7 @@ class CategoryController extends Controller
     public function index()
     {
         if (request()->ajax()){
-            $query = Category::all();
+            $query = User::all();
             return Datatables::of($query)
             ->addColumn('action', function($item){
             return 
@@ -30,18 +31,22 @@ class CategoryController extends Controller
                         Aksi
                     </button>
                     <div class="dropdown-menu">
-                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$item->id.'" class="dropdown-item change-category">Ubah</a>
+                        <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$item->id.'" class="dropdown-item change-user">Ubah</a>
                         <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$item->id.'" class="dropdown-item delete text-danger">Hapus</a>
                     </div>
                 </div>';
             })
-            ->editColumn('photo', function ($item){
-                return $item->photo ? '<img src="'.Storage::url("category/$item->photo").'" style="max-height:50px;"/>' : '';
+            ->editColumn('roles', function ($item){
+                if ($item->roles=='ADMIN'){
+                    return'<span class="badge badge-danger">'.$item->roles.'</span>';
+                }else{
+                   return '<span class="badge badge-warning text-white">'.$item->roles.'</span>';
+                }
             })
-            ->rawColumns(['action','photo'])
+            ->rawColumns(['action','roles'])
             ->make();
     }
-    return view('pages.admin.category.index');
+    return view('pages.admin.user.index');
 }
 
     /**
@@ -60,37 +65,11 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(UserRequest $request)
     {
-
-        //validasi data user ke database
-        // if ($request->ajax()) {
-        //     $request->validate([
-        //         'name'=>'required|string|min:5|max:60:',
-        //         'photo'=>'required|image|mimes:jpg,jpeg,png,gif,tif,svg|max:10000',
-        //     ]);
-        // }
-
         $data=$request->All();
-        Storage::delete('public/category/'.$request->photo);
-        if ($request->hasFile('photo')){
-        //code for remove old file
-        //  if($request->photo && file_exists(storage_path('public/category/' . $request->photo))){
-            // Storage::delete('public/category/'.$request->photo);
-            // File::delete('public/category'.$request->photo);
-        //  }
-        
-            $slug=Str::slug($request['name']);
-            $extFile=$request->photo->getClientOriginalExtension();
-            $namaFile=$slug.'-'.time().".".$extFile;
-            $request->photo->storeAs('public/category',$namaFile);  
-        }else{
-             $namaFile='defaultPhoto.jpg';
-        }
-        $id = $request->id;
-        $data['slug']=Str::slug($request->name);
-        $data['photo']=$namaFile;
-        Category::updateOrCreate(['id'=>$id],$data);
+        $data['password']=Hash::make($request->password);
+        User::updateOrCreate(['id'=>$request->id],$data);
         return response()->json($data); 
     }
 
@@ -114,7 +93,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $where = array('id' => $id);
-        $post  = Category::where($where)->first();
+        $post  = User::where($where)->first();
         return response()->json($post);
     }
 
@@ -125,14 +104,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, $id)
+    public function update(UserRequest $request, $id)
     {
-        // $data=$request->all();
-        // $data['slug']=Str::slug($request->name);
-        // $data['photo']=$request->file('photo')->store('category','public');
-        // $item=Category::findorFail($id);
-        // $item->update($data);
-        // return redirect()->route('category.index');  
+        //   
     }
 
     /**
@@ -143,7 +117,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $data = Category::findOrFail($id)->delete();
+        $data = User::findOrFail($id)->delete();
         return response()->json($data);
     }
 }

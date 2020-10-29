@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddResiAndShippingStatusToTransactionsDetailsTable extends Migration
+class AddResiAndShippingStatusToTransactionDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddResiAndShippingStatusToTransactionsDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::table('transactions_details', function (Blueprint $table) {
-            $table->string('shipping_status');
-            $table->string('resi');
+        Schema::table('transaction_details', function (Blueprint $table) {
+            $table->string('shipping_status'); // PENDING/SHIPPING/SUCCESS
+            $table->string('resi'); 
         });
     }
 
@@ -26,7 +26,7 @@ class AddResiAndShippingStatusToTransactionsDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::table('transactions_details', function (Blueprint $table) {
+        Schema::table('transaction_details', function (Blueprint $table) {
             $table->dropColumn('shipping_status');
             $table->dropColumn('resi');
         });

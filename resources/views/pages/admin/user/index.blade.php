@@ -42,7 +42,7 @@
 </div>
 @endsection
 
-<!-- Modal Add & Update-->
+<!-- Modal Add-->
 <div class="modal fade" id="appModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -53,68 +53,28 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="appForm">
-            <input type="hidden" name="id" id="id">
-
-            <div class="form-group" id="form-group-name">
-                <label for="name">Nama User</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    aria-describedby="name"
-                    name="name"
-                    value=""
-                    required
-                />
-                <div id="error-name"></div>
-            </div>
-
-            <div class="form-group" id="form-group-photo">
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    aria-describedby="email"
-                    name="email"
-                    value=""
-                    required
-                />
-                <div id="error-email"></div>
-            </div>
-
-             <div class="form-group" id="form-group-password">
-                <label for="password">Password</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    aria-describedby="password"
-                    name="password"
-                    value=""
-                    required
-                />
-                <div id="error-password"></div>
-            </div>
-            
-            <div class="form-group" id="form-group-roles">
-                <label for="roles">Roles</label>
-                <select name="roles" id="roles" class="form-control" required>
-                    <option value="ADMIN">Admin</option>
-                    <option value="USER">User</option>
-                </select>
-             <div id="error-roles"></div>
-            </div>
+        @include('pages.admin.user.form',['tombol'=>'daftar'])
       </div>
-    <div class="modal-footer">
-            <button type="submit" class="btn btn-success" id="saveButton" value="create">Save </button>
-    </div>
-        </form>
-    </div>
   </div>
 </div>
-<!-- Modal Add & Update -->
+<!-- Modal Add -->
+
+<!-- Modal Update-->
+<div class="modal fade" id="appModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalTittleUpdate"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        @include('pages.admin.user.form',['tombol'=>'daftar'])
+      </div>
+  </div>
+</div>
+<!-- Modal Update -->
 
 @push('addon-script')
 <script>
@@ -171,9 +131,9 @@
         $('body').on('click', '.change-user', function(){
             var data_id=$(this).data('id');
             $.get('user/'+data_id+'/edit',function(data){
-                $('#modalTittle').html("Change User");
+                $('#modalTittleUpdate').html("Change User");
                 $('#saveButton').val("change-user");
-                $('#appModal').modal('show');
+                $('#appModalUpdate').modal('show');
                 $('#id').val(data.id);
                 $('#name').val(data.name);
                 $('#email').val(data.email);
@@ -181,7 +141,7 @@
                 $('#roles').val(data.roles);
             });
         });
-
+        
         //Save, update & 
         $("#saveButton").click(function (event) {
         event.preventDefault();
@@ -216,13 +176,15 @@
                     error: function (data) { //jika error tampilkan error pada conso
                         $('#saveButton').html('Save');
                         console.log((data.responseJSON.errors));
-                        // $('#error-name').append('<div class="text-danger">'+data.responseJSON.errors.name[0]+'</div>');
-                        // $('#error-photo').append('<div class="text-danger">'+data.responseJSON.errors.photo[0]+'</div>');
+                        $('#error-name').append('<div class="text-danger">'+data.responseJSON.errors.name[0]+'</div>');
+                        $('#error-email').append('<div class="text-danger">'+data.responseJSON.errors.email[0]+'</div>');
+                        $('#error-password').append('<div class="text-danger">'+data.responseJSON.errors.password[0]+'</div>');
+                        $('#error-password-confirmed').append('<div class="text-danger">'+data.responseJSON.errors.password[0]+'</div>');
+                        $('#roles').append('<div class="text-danger">'+data.responseJSON.errors.roles[0]+'</div>');
                     }
                 });
             });
   
-
         //if delete button clicked
         $(document).on('click', '.delete', function (event) {
                 event.preventDefault();

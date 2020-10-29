@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+//use App\Roles;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -46,6 +47,9 @@ class UserController extends Controller
             ->rawColumns(['action','roles'])
             ->make();
     }
+
+    //show data roles on dropdown
+    //$items = Roles::all();
     return view('pages.admin.user.index');
 }
 

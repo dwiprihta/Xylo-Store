@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DeleteResiFieldAtTransactionsTable extends Migration
+class AddSlugToProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class DeleteResiFieldAtTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->dropColumn('resi');
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('slug'); 
         });
     }
 
@@ -25,8 +25,8 @@ class DeleteResiFieldAtTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('transactions', function (Blueprint $table) {
-            $table->string('resi');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('slug');
         });
     }
 }

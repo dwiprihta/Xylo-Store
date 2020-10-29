@@ -42,7 +42,7 @@
 </div>
 @endsection
 
-<!-- Modal Add & Update-->
+<!-- Modal Add-->
 <div class="modal fade" id="appModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -67,37 +67,29 @@
                     value=""
                 />
                 <div id="error-name"></div>
-                 {{-- <span class="help-block"></span> --}}
-                @error('name')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
             </div>
 
-            <div class="form-group" id="form-group-photo">
-                <label for="photo">Icon Category</label>
-                <input
-                    type="file"
-                    class="form-control"
-                    id="photo"
-                    aria-describedby="photo"
-                    name="photo"
-                    value=""
-                />
-                <div id="error-photo"></div>
-                {{-- <span class="help-block"></span> --}}
-                @error('photo')
-                    <div class="text-danger">{{ $message }}</div>
-                @enderror
+            <div class="form-group">
+                <label for="photo">
+                </label>
+                    <div class="custom-file">
+                    <input type="file" id="photo" name="photo" accept="image/*"
+                    class="custom-file-input @error('gambar_profil') is-invalid @enderror">
+                    <label class="custom-file-label col-md-12" for="gambar_profil"
+                    onchange="$('#photo').val($(this).val());">
+                    {{ $user->gambar_profil ?? 'Pilih gambar...'}}
+                    </label>
+                </div>
             </div>
-      </div>
-    <div class="modal-footer">
-            <button type="submit" class="btn btn-success" id="saveButton" value="create">Save </button>
-    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" id="saveButton" value="create">Save </button>
+            </div>
         </form>
-    </div>
+      </div>
   </div>
 </div>
-<!-- Modal Add & Update -->
+<!-- Modal Add -->
 
 @push('addon-script')
 <script>
@@ -141,6 +133,21 @@
             });
         });
 
+        //setup inputan file
+        $('input[type="file"]').on('change', function () {
+            let filenames = [];
+            let files = document.getElementById('photo').files;
+
+            for (let i in files) {
+                if (files.hasOwnProperty(i)) {
+                    filenames.push(files[i].name);
+                }
+            }
+
+            $(this).next('.custom-file-label').addClass("selected").
+            html(filenames.join(',    '));
+        });
+
         //If add button clicked
         $('#addButton').click(function(){
             $('#saveButton').val("create-post");//set value to create post
@@ -154,7 +161,8 @@
         $('body').on('click', '.change-category', function(){
             var data_id=$(this).data('id');
             $.get('category/'+data_id+'/edit',function(data){
-                $('#modalTittle').html("Change Category");
+                $('#modalTittlee').html("Change Category");
+                $('#infPhoto').html("*Kosongkan jika tidak ingin merubah");
                 $('#saveButton').val("change-category");
                 $('#appModal').modal('show');
                 $('#id').val(data.id);

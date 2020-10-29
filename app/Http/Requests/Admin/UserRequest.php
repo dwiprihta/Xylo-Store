@@ -27,6 +27,7 @@ class UserRequest extends FormRequest
             //start validatoin
             'name'=>'required|max:50|min:1',
             'email'=>'required|email|unique:users',
+            'password'=>'required|confirmed|min:6',
             'roles'=>'nullable|string|in:ADMIN,USER'
         ];
     }

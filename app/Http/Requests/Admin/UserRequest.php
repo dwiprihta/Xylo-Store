@@ -26,8 +26,9 @@ class UserRequest extends FormRequest
         return [
             //start validatoin
             'name'=>'required|max:50|min:1',
-            'email'=>'required|email|unique:users',
-            'password'=>'required|confirmed|min:6',
+            'email'=>'required|email|unique:users,email,'.$this->id,
+            // 'password'=>'required|confirmed|min:6',
+            // 'password'=>'min:6',
             'roles'=>'nullable|string|in:ADMIN,USER'
         ];
     }

@@ -63,29 +63,20 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
 
-        //validasi data user ke database
-        // if ($request->ajax()) {
-        //     $request->validate([
-        //         'name'=>'required|string|min:5|max:60:',
-        //         'photo'=>'required|image|mimes:jpg,jpeg,png,gif,tif,svg|max:10000',
-        //     ]);
-        // }
 
         $data=$request->All();
-        Storage::delete('public/category/'.$request->photo);
-        if ($request->hasFile('photo')){
-        //code for remove old file
-        //  if($request->photo && file_exists(storage_path('public/category/' . $request->photo))){
-            // Storage::delete('public/category/'.$request->photo);
-            // File::delete('public/category'.$request->photo);
-        //  }
-        
-            $slug=Str::slug($request['name']);
-            $extFile=$request->photo->getClientOriginalExtension();
-            $namaFile=$slug.'-'.time().".".$extFile;
-            $request->photo->storeAs('public/category',$namaFile);  
+        if ($request->photo_update !== 0 && $request->photo <= 0){
+             $namaFile=$request->photo_update;
         }else{
-             $namaFile='defaultPhoto.jpg';
+            Storage::delete('public/category/'.$request->photo);
+            if ($request->hasFile('photo')){
+                $slug=Str::slug($request['name']);
+                $extFile=$request->photo->getClientOriginalExtension();
+                $namaFile=$slug.'-'.time().".".$extFile;
+                $request->photo->storeAs('public/category',$namaFile);  
+            }else{
+                $namaFile='defaultPhoto.jpg';
+            }   
         }
         $id = $request->id;
         $data['slug']=Str::slug($request->name);

@@ -53,43 +53,12 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="appForm">
-            <input type="hidden" name="id" id="id">
-
-            <div class="form-group" id="form-group-name">
-                <label for="name">Nama Category</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="name"
-                    aria-describedby="name"
-                    name="name"
-                    value=""
-                />
-                <div id="error-name"></div>
-            </div>
-
-            <div class="form-group">
-                <label for="photo">
-                </label>
-                    <div class="custom-file">
-                    <input type="file" id="photo" name="photo" accept="image/*"
-                    class="custom-file-input @error('gambar_profil') is-invalid @enderror">
-                    <label class="custom-file-label col-md-12" for="gambar_profil"
-                    onchange="$('#photo').val($(this).val());">
-                    {{ $user->gambar_profil ?? 'Pilih gambar...'}}
-                    </label>
-                </div>
-            </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" id="saveButton" value="create">Save </button>
-            </div>
-        </form>
+        @include('pages.admin.category.form');
       </div>
   </div>
 </div>
 <!-- Modal Add -->
+
 
 @push('addon-script')
 <script>
@@ -161,13 +130,14 @@
         $('body').on('click', '.change-category', function(){
             var data_id=$(this).data('id');
             $.get('category/'+data_id+'/edit',function(data){
-                $('#modalTittlee').html("Change Category");
+                $('#modalTittle').html("Change Category");
                 $('#infPhoto').html("*Kosongkan jika tidak ingin merubah");
+                $("#saveButton").attr("id", "updateButton");
                 $('#saveButton').val("change-category");
                 $('#appModal').modal('show');
                 $('#id').val(data.id);
                 $('#name').val(data.name);
-                $('#photo').val(data.photo);
+                $('#photo_update').val(data.photo);
             });
         });
 
@@ -199,6 +169,51 @@
 
         $("#saveButton").click(function (event) {
         event.preventDefault();
+            var form = $('#appForm')[0];
+            var data = new FormData(form);
+            $('#saveButton').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Mengirim`);
+                $.ajax({
+                    type: "POST", //karena simpan kita pakai method POST
+                    enctype:'multipart/form-data',
+                    url: "{{ route('category.store') }}", //url simpan data
+                    data:data, //panggil form yang sudah dideklarasikan diatas
+                    dataType: 'json', //data tipe kita kirim berupa JSON
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    timeout: 600000,
+                    success: function (data) { //jika berhasil 
+                        $('#appForm').trigger("reset"); //form reset
+                        $('#appModal').modal('hide'); //modal hide
+                        $('#saveButton').html('Simpan'); //tombol simpan
+                        var oTable = $('#appTable').dataTable(); //inialisasi datatable
+                        oTable.fnDraw(false); //reset datatable
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data Sukses ditambahkan!',
+                            showConfirmButton:false,
+                            timer: 1500
+                        });
+                    },
+                    error: function (data) { //jika error tampilkan error pada conso
+                        $('#saveButton').html('Save');
+                        console.log((data.responseJSON.errors));
+                        $('#error-name').html('<div class="text-danger">'+data.responseJSON.errors.name[0]+'</div>');
+                        $('#error-photo').html('<div class="text-danger">'+data.responseJSON.errors.photo[0]+'</div>');
+                        // if (res.status == 422) {
+                        //     var data = res.responseJSON;
+                        //     for (let i in data) {
+                        //         console.log(i, data[i][0])
+                        //     }
+                        // }
+                    }
+                });
+            });
+
+            $("updateButton").click(function (event) {
+            event.preventDefault();
             var form = $('#appForm')[0];
             var data = new FormData(form);
             $('#saveButton').html(`<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

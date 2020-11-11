@@ -72,7 +72,11 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $data=$request->All();
-        $data['password']=Hash::make($request->password);
+        if ($request->password){
+            $data['password']=bcrypt($request->password);
+        }else{
+           unset($data['password']);
+        }
         User::updateOrCreate(['id'=>$request->id],$data);
         return response()->json($data); 
     }
